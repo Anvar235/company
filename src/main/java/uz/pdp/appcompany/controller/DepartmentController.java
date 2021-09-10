@@ -1,6 +1,7 @@
 package uz.pdp.appcompany.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.appcompany.entity.Department;
 import uz.pdp.appcompany.payload.DepartmentDto;
@@ -17,27 +18,33 @@ public class DepartmentController {
     DepartmentService departmentService;
 
     @GetMapping
-    public List<Department> getDepartment(){
-        return departmentService.getDepartment();
+    public ResponseEntity<List<Department>> getDepartment() {
+
+        List<Department> departmentList = departmentService.getDepartment();
+        return ResponseEntity.ok(departmentList);
     }
 
     @GetMapping("/{id}")
-    public Department getDepartmentById(@PathVariable Integer id){
-        return departmentService.getDepartmentById(id);
+    public ResponseEntity<Department> getDepartmentById(@PathVariable Integer id) {
+        Department departmentById = departmentService.getDepartmentById(id);
+        return ResponseEntity.ok(departmentById);
     }
 
     @PostMapping
-    public Result addDepartment(@RequestBody DepartmentDto departmentDto){
-        return departmentService.addDepartment(departmentDto);
+    public ResponseEntity<Result> addDepartment(@RequestBody DepartmentDto departmentDto) {
+        Result addDepartment = departmentService.addDepartment(departmentDto);
+        return ResponseEntity.status(addDepartment.isSuccess() ? 201 : 409).body(addDepartment);
     }
 
     @DeleteMapping("/{id}")
-    public Result deleteDepartment(@PathVariable Integer id){
-        return departmentService.deleteDepartment(id);
+    public ResponseEntity<Result> deleteDepartment(@PathVariable Integer id) {
+        Result deleteDepartment = departmentService.deleteDepartment(id);
+        return ResponseEntity.status(deleteDepartment.isSuccess() ? 202 : 409).body(deleteDepartment);
     }
 
     @PutMapping("/{id}")
-    public Result editDepartment(@PathVariable Integer id, @RequestBody DepartmentDto departmentDto){
-        return departmentService.editDepartment(id, departmentDto);
+    public ResponseEntity<Result> editDepartment(@PathVariable Integer id, @RequestBody DepartmentDto departmentDto) {
+        Result result = departmentService.editDepartment(id, departmentDto);
+        return ResponseEntity.status(result.isSuccess() ? 202 : 409).body(result);
     }
 }

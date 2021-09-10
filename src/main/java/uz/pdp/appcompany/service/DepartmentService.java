@@ -43,15 +43,16 @@ public class DepartmentService {
         return new Result("Department saved", true);
     }
 
-    public Result deleteDepartment(Integer id){
-        Optional<Department> optionalDepartment = departmentRepository.findById(id);
-        if (!optionalDepartment.isPresent())
-            return new Result("Department not found", false);
-        departmentRepository.deleteById(id);
-        return new Result("Department deleted", true);
+    public Result deleteDepartment(Integer id) {
+        try {
+            departmentRepository.deleteById(id);
+            return new Result("Department deleted", true);
+        } catch (Exception e) {
+            return new Result("Error!!!", false);
+        }
     }
 
-    public Result editDepartment(Integer id, DepartmentDto departmentDto){
+    public Result editDepartment(Integer id, DepartmentDto departmentDto) {
         Optional<Department> optionalDepartment = departmentRepository.findById(id);
         if (!optionalDepartment.isPresent())
             return new Result("Department not found", false);

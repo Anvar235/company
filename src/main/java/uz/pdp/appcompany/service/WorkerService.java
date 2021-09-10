@@ -26,17 +26,17 @@ public class WorkerService {
     @Autowired
     AddressRepository addressRepository;
 
-    public List<Worker> getWorker(){
+    public List<Worker> getWorker() {
         return workerRepository.findAll();
     }
 
-    public Worker getWorkerById(Integer id){
+    public Worker getWorkerById(Integer id) {
         Optional<Worker> optionalWorker = workerRepository.findById(id);
         return optionalWorker.orElseGet(Worker::new);
     }
 
-    public Result addWorker(WorkerDto workerDto){
-        Worker addWorker=new Worker();
+    public Result addWorker(WorkerDto workerDto) {
+        Worker addWorker = new Worker();
         addWorker.setName(workerDto.getName());
 
         boolean existsByPhoneNumber = workerRepository.existsByPhoneNumber(workerDto.getPhoneNumber());
@@ -58,15 +58,16 @@ public class WorkerService {
         return new Result("Address saved", true);
     }
 
-    public Result deleteWorker(Integer id){
-        Optional<Worker> optionalWorker = workerRepository.findById(id);
-        if (!optionalWorker.isPresent())
-            return new Result("Worker not found", false);
-        workerRepository.deleteById(id);
-        return new Result("Worker deleted", true);
+    public Result deleteWorker(Integer id) {
+        try {
+            workerRepository.deleteById(id);
+            return new Result("Worker deleted", true);
+        } catch (Exception e) {
+            return new Result("Error!!!", false);
+        }
     }
 
-    public Result editWorker(Integer id, WorkerDto workerDto){
+    public Result editWorker(Integer id, WorkerDto workerDto) {
         Optional<Worker> optionalWorker = workerRepository.findById(id);
         if (!optionalWorker.isPresent())
             return new Result("Worker not found", false);

@@ -33,11 +33,12 @@ public class AddressService {
     }
 
     public Result deleteAddress(Integer id) {
-        Optional<Address> optionalAddress = addressRepository.findById(id);
-        if (!optionalAddress.isPresent())
-            return new Result("Address not found", false);
-        addressRepository.deleteById(id);
-        return new Result("Address deleted", true);
+       try {
+           addressRepository.deleteById(id);
+           return new Result("Address deleted", true);
+       }catch (Exception e) {
+           return new Result("Error!!!", false);
+       }
     }
 
     public Result editAddress(Integer id, Address address) {

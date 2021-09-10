@@ -1,6 +1,7 @@
 package uz.pdp.appcompany.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.appcompany.entity.Company;
 import uz.pdp.appcompany.payload.CompanyDto;
@@ -17,27 +18,32 @@ public class CompanyController {
     CompanyService companyService;
 
     @GetMapping
-    public List<Company> getCompany() {
-        return companyService.getCompany();
+    public ResponseEntity<List<Company>> getCompany() {
+        List<Company> companyList = companyService.getCompany();
+        return ResponseEntity.ok(companyList);
     }
 
     @GetMapping("/{id}")
-    public Company getCompanyById(@PathVariable Integer id) {
-        return companyService.getCompanyById(id);
+    public ResponseEntity<Company> getCompanyById(@PathVariable Integer id) {
+        Company companyById = companyService.getCompanyById(id);
+        return ResponseEntity.ok(companyById);
     }
 
     @PostMapping
-    public Result addCompany(@RequestBody CompanyDto companyDto){
-        return companyService.addCompany(companyDto);
+    public ResponseEntity<Result> addCompany(@RequestBody CompanyDto companyDto) {
+        Result result = companyService.addCompany(companyDto);
+        return ResponseEntity.status(result.isSuccess() ? 201 : 409).body(result);
     }
 
     @DeleteMapping("/{id}")
-    public Result deleteCompany(@PathVariable Integer id){
-        return companyService.deleteCompany(id);
+    public ResponseEntity<Result> deleteCompany(@PathVariable Integer id) {
+        Result deleteCompany = companyService.deleteCompany(id);
+        return ResponseEntity.status(deleteCompany.isSuccess() ? 202 : 409).body(deleteCompany);
     }
 
     @PutMapping("/{id}")
-    public Result editCompany(@PathVariable Integer id, @RequestBody CompanyDto companyDto){
-        return companyService.editCompany(id, companyDto);
+    public ResponseEntity<Result> editCompany(@PathVariable Integer id, @RequestBody CompanyDto companyDto) {
+        Result editCompany = companyService.editCompany(id, companyDto);
+        return ResponseEntity.status(editCompany.isSuccess() ? 202 : 409).body(editCompany);
     }
 }

@@ -45,11 +45,12 @@ public class CompanyService {
     }
 
     public Result deleteCompany(Integer id) {
-        Optional<Company> optionalCompany = companyRepository.findById(id);
-        if (!optionalCompany.isPresent())
-            return new Result("Company not found", false);
-        companyRepository.deleteById(id);
-        return new Result("Company deleted", false);
+        try {
+            companyRepository.deleteById(id);
+            return new Result("Company deleted", true);
+        } catch (Exception e) {
+            return new Result("Error!!!", false);
+        }
     }
 
     public Result editCompany(Integer id, CompanyDto companyDto) {
